@@ -7,6 +7,7 @@ public class Animation : VCNVMonoBehaviour
     [SerializeField] protected PlayerCtrl playerCtrl;
     public PlayerCtrl PlayerCtrl=>playerCtrl;
     [SerializeField] protected int direction;
+    [SerializeField] protected bool movePc;
 
     protected override void LoadCompoments()
     {
@@ -14,7 +15,7 @@ public class Animation : VCNVMonoBehaviour
         this.LoadPlayerCtrl();
     }
 
-    protected virtual void LoadPlayerCtrl()
+	protected virtual void LoadPlayerCtrl()
     {
         if (this.playerCtrl != null) return;
         this.playerCtrl = transform.parent.GetComponent<PlayerCtrl>();
@@ -24,10 +25,42 @@ public class Animation : VCNVMonoBehaviour
     protected override void Update()
     {
         base.Update();
-        this.HandleRunAnimation();
-    }
+        if (movePc) 
+        {
+            this.HandleRunAnimationPc();
+        }
+        else
+        {
+			this.HandleRunAnimation();
+		}
+	}
 
-    protected virtual void HandleRunAnimation()
+	protected virtual void HandleRunAnimationPc()
+	{
+        float horizontalInput = Input.GetAxis("Horizontal");
+		var animator = this.playerCtrl.Animator;
+		if (horizontalInput!=0)
+		{
+			animator.SetBool("isRunning", true);
+			if (horizontalInput<0)
+			{
+				this.direction = -1;
+				transform.parent.localScale = new Vector3(-1f, 1f, 1f);
+			}
+			else if (horizontalInput>0)
+			{
+				this.direction = 1;
+				transform.parent.localScale = new Vector3(1f, 1f, 1f);
+			}
+		}
+		else
+		{
+			this.direction = 0;
+			animator.SetBool("isRunning", false);
+		}
+	}
+
+	protected virtual void HandleRunAnimation()
     {
         bool isMovingLeft = TouchController.Instance.isMovingLeft;
         bool isMovingRight = TouchController.Instance.isMovingRight;
