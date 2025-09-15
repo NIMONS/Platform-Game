@@ -8568,6 +8568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCtrl: {fileID: 1226368329}
   direction: 0
+  movePc: 0
 --- !u!4 &469976059
 Transform:
   m_ObjectHideFlags: 0
@@ -10200,10 +10201,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCtrl: {fileID: 1226368329}
-  moveSpeed: 8
-  jumpForce: 9
+  moveSpeed: 9
+  jumpForce: 13
   jumCount: 0
   maxJumCount: 2
+  movePc: 0
 --- !u!4 &552631134
 Transform:
   m_ObjectHideFlags: 0
@@ -47972,8 +47974,8 @@ MonoBehaviour:
   startPoint: {fileID: 884393506}
   platform: {fileID: 0}
   health: {fileID: 1403911251}
-  heart: {fileID: 0}
-  _transform: {fileID: 0}
+  heart: {fileID: 1422047245}
+  _transform: {fileID: 456769104}
 --- !u!61 &1226368330
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -51868,6 +51870,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1422047245 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7920328829232877021, guid: 3a432410252832b4ebbec89b450d32f4, type: 3}
+  m_PrefabInstance: {fileID: 274012227}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f1ed245304fd44ca17d36488f833ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1423642767
 GameObject:
   m_ObjectHideFlags: 0
@@ -55304,7 +55317,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1571034760}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1571034760
 MonoBehaviour:
   m_ObjectHideFlags: 0

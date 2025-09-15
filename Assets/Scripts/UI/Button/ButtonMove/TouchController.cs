@@ -65,7 +65,7 @@ public class TouchController : VCNVMonoBehaviour
     protected override void Start()
     {
         base.Start();
-        this.ListenEventClick();
+        //this.ListenEventClick();
     }
 
     protected override void Update()
@@ -105,46 +105,52 @@ public class TouchController : VCNVMonoBehaviour
 
             //Sự kiện khi nhấn nút nhảy
 
-            EventTrigger.Entry entryJumpDown = new EventTrigger.Entry();
-            entryJumpDown.eventID = EventTriggerType.PointerDown;
-            entryJumpDown.callback.AddListener((eventData) => { Jump(); });
-            triggerJump.triggers.Add(entryJumpDown);
+            //EventTrigger.Entry entryJumpDown = new EventTrigger.Entry();
+            //entryJumpDown.eventID = EventTriggerType.PointerDown;
+            //entryJumpDown.callback.AddListener((eventData) => { Jump(); });
+            //triggerJump.triggers.Add(entryJumpDown);
 
-            EventTrigger.Entry entryJumpUp = new EventTrigger.Entry();
-            entryJumpUp.eventID = EventTriggerType.PointerUp;
-            entryJumpUp.callback.AddListener((eventData) => { EndJump(); });
-            triggerJump.triggers.Add(entryJumpUp);
+            //EventTrigger.Entry entryJumpUp = new EventTrigger.Entry();
+            //entryJumpUp.eventID = EventTriggerType.PointerUp;
+            //entryJumpUp.callback.AddListener((eventData) => { EndJump(); });
+            //triggerJump.triggers.Add(entryJumpUp);
         }
 
-        btnJump.onClick.AddListener(Jump);
+        //btnJump.onClick.AddListener(Jump);
     }
     public void Jump()
     {
-        if (!hasJumped) // Nếu chưa nhảy lần nào
-        {
-            Debug.Log("Người chơi đã ấn nút nhảy");
-            this.isJumping = true;
-            hasJumped = true; // Đặt biến hasJumped thành true để chỉ ra đã nhảy một lần
-        }
-        else // Nếu đã nhảy lần đầu tiên và nhấn nút nhảy lần nữa
-        {
-            Debug.Log("Người chơi đã ấn nút nhảy lần thứ 2");
-            // Thực hiện hành động khi nhấn nút nhảy lần thứ 2 ở đây
-            this.DoubleJump();
-        }
+        int jumCount = this.playerCtrl.Movement.JumCount;
+        int maxJumpCount = this.playerCtrl.Movement.MaxJumCount;
+        Animator animator = this.playerCtrl.Animator;
+		if (jumCount < maxJumpCount)
+		{
+			DoubleJump();
+            jumCount++;
+			this.playerCtrl.Movement.SetJumpCount(jumCount);
+
+			if (jumCount == 1) 
+			{
+				animator.SetBool("isJump", true);
+			}
+			else if (jumCount == 2) 
+			{
+				animator.SetBool("isDoubleJump", true);
+			}
+		}
+
+		Debug.Log("nhảy lên");
     }
 
     public virtual void DoubleJump()
     {
-        Animator playerAnimator = this.playerCtrl.Animator;
-        int maxJumpCount = 2;
-        if (this.jumpCount < maxJumpCount)
-        {
-            playerAnimator.SetBool("isDoubleJump", true);
-            this.playerCtrl.Jump();
-            this.jumpCount++;
-        }
-    }
+        float jumpForce = this.playerCtrl.Movement.JumpForce;
+        Rigidbody2D rb = this.playerCtrl.Rigidbody2D;
+
+        rb.velocity = new Vector2(rb.velocity.x, 0f);
+
+		this.playerCtrl.Rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+	}
 
     public void EndJump()
     {
@@ -182,5 +188,19 @@ public class TouchController : VCNVMonoBehaviour
         }
     }
 
-   
+    public void MoveLeft()
+    {
+        Debug.Log("moving left");
+    }
+
+	public void MoveRight()
+	{
+		Debug.Log("moving left");
+	}
+
+	//protected void Jump()
+	//{
+	//	Debug.Log("moving left");
+	//}
+
 }

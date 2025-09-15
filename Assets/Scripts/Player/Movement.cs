@@ -184,4 +184,9 @@ public class Movement : VCNVMonoBehaviour
 		}
 
 	}
+
+    public void SetJumpCount(int count)
+    {
+        this.jumCount = count;
+    }
 }

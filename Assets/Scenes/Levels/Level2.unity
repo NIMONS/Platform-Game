@@ -32602,8 +32602,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCtrl: {fileID: 120239770}
-  moveSpeed: 8
-  jumpForce: 9
+  moveSpeed: 9
+  jumpForce: 13
   jumCount: 0
   maxJumCount: 2
   movePc: 0

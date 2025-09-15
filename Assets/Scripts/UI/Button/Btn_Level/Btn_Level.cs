@@ -29,7 +29,7 @@ public abstract class Btn_Level : BaseButton
     protected override void OnClick()
     {
         //this.time.StopTimer();
-        LevelManagerr.Instance.CompleteLevel();
+        //LevelManagerr.Instance.CompleteLevel();
         SceneManager.LoadScene(stringLoadToScene);
     }
 
