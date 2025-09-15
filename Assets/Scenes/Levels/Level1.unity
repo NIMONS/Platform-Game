@@ -20777,6 +20777,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCtrl: {fileID: 1248879898}
   direction: 0
+  movePc: 1
 --- !u!4 &346494370
 Transform:
   m_ObjectHideFlags: 0
@@ -21242,10 +21243,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCtrl: {fileID: 1248879898}
-  moveSpeed: 8
-  jumpForce: 9
+  moveSpeed: 9
+  jumpForce: 13
   jumCount: 0
   maxJumCount: 2
+  movePc: 0
 --- !u!4 &388504684
 Transform:
   m_ObjectHideFlags: 0
@@ -31732,7 +31734,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248879897}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

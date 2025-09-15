@@ -24,15 +24,15 @@ public class Animation : VCNVMonoBehaviour
 
     protected override void Update()
     {
-        base.Update();
-        if (movePc) 
-        {
-            this.HandleRunAnimationPc();
-        }
-        else
-        {
-			this.HandleRunAnimation();
-		}
+  //      base.Update();
+  //      if (movePc) 
+  //      {
+  //          this.HandleRunAnimationPc();
+  //      }
+  //      else
+  //      {
+		//	this.HandleRunAnimation();
+		//}
 	}
 
 	protected virtual void HandleRunAnimationPc()

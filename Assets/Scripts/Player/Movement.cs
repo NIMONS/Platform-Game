@@ -7,8 +7,8 @@ public class Movement : VCNVMonoBehaviour
     [SerializeField] protected PlayerCtrl playerCtrl;
     public PlayerCtrl PlayerCtrl=>playerCtrl;
 
-    [SerializeField] protected float moveSpeed = 5f;
-    [SerializeField] protected float jumpForce = 10f;
+    [SerializeField] protected float moveSpeed = 9f;
+    [SerializeField] protected float jumpForce = 13f;
      public float JumpForce => jumpForce;
     [SerializeField] protected int jumCount = 0;
     public int JumCount => jumCount;
@@ -24,15 +24,17 @@ public class Movement : VCNVMonoBehaviour
 
     protected override void Update()
     {
-        if (movePc)
-        {
-			this.MovePlayerPc();
-            this.jumpForce = 12f;
-        }
-        else
-        {
-			this.MovePlayer();
-		}
+        //      if (movePc)
+        //      {
+        //	this.MovePlayerPc();
+        //          this.jumpForce = 12.5f;
+        //      }
+        //      else
+        //      {
+        //	this.MovePlayer();
+        //}
+        //this.MovePlayer(); đây là hàm move nhân vật trên điện thoại
+        this.MovePlayerPcTemp();
 	}
 
     protected virtual void LoadPlayerCtrl()
@@ -53,26 +55,26 @@ public class Movement : VCNVMonoBehaviour
 
         if (horizontalInput > 0)
         {
-            //movement += Vector2.right * this.moveSpeed * Time.deltaTime;
-            currentVelocity.x = this.moveSpeed;
+            movement += Vector2.right * this.moveSpeed * Time.deltaTime;
+            //currentVelocity.x = this.moveSpeed;
             transform.parent.localScale = new Vector3(1f, 1f, 1f);
         }
         else if (horizontalInput < 0)
         {
-            //movement += Vector2.left * this.moveSpeed * Time.deltaTime;
-            currentVelocity.x = -this.moveSpeed;
+            movement += Vector2.left * this.moveSpeed * Time.deltaTime;
+            //currentVelocity.x = -this.moveSpeed;
             transform.parent.localScale = new Vector3(-1f, 1f, 1f);
         }
-        else
-        {
-            currentVelocity.x = 0;
-        }
+        //else
+        //{
+        //    currentVelocity.x = 0;
+        //}
 
-        playerCtrl.Rigidbody2D.velocity = currentVelocity;
-		//transform.parent.Translate(movement);
-		transform.parent.rotation = Quaternion.identity;
+        //playerCtrl.Rigidbody2D.velocity = currentVelocity;
+		transform.parent.Translate(movement);
+        //transform.parent.rotation = Quaternion.identity;
 
-		if (isJumping)
+        if (isJumping)
 		{
 			if (this.jumCount < this.maxJumCount)
 			{
@@ -135,7 +137,7 @@ public class Movement : VCNVMonoBehaviour
     public virtual void Jump()
     {
         Debug.Log("Jumping");
-        this.playerCtrl.Rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+		this.playerCtrl.Rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
     public virtual void Grounded()
@@ -143,8 +145,43 @@ public class Movement : VCNVMonoBehaviour
         Animator animator = this.playerCtrl.Animator;
         animator.SetBool("isRunning", true);
         this.jumCount = 0;
-        TouchController.Instance.EndJump();
-        TouchController.Instance.jumpCount = 1;
+        //TouchController.Instance.EndJump();
+        //TouchController.Instance.jumpCount = 1;
     }
 
+    protected void MovePlayerPcTemp()
+    {
+		Animator animator = this.playerCtrl.Animator;
+		Rigidbody2D rb = this.playerCtrl.Rigidbody2D;
+
+		float horizontalInput = Input.GetAxisRaw("Horizontal");
+
+		rb.velocity = new Vector2(horizontalInput * this.moveSpeed, rb.velocity.y);
+
+		if (horizontalInput > 0)
+			transform.parent.localScale = new Vector3(1f, 1f, 1f);
+		else if (horizontalInput < 0)
+			transform.parent.localScale = new Vector3(-1f, 1f, 1f);
+
+		animator.SetBool("isRunning", horizontalInput != 0);
+
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			if (this.jumCount < this.maxJumCount)
+			{
+				Jump(); // hàm Jump() nên add lực cho Rigidbody2D thay vì Translate
+				this.jumCount++;
+
+				if (jumCount == 1) // nhảy lần 1
+				{
+					animator.SetBool("isJump", true);
+				}
+				else if (jumCount == 2) // nhảy lần 2 (double jump)
+				{
+					animator.SetBool("isDoubleJump", true);
+				}
+			}
+		}
+
+	}
 }

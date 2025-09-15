@@ -104,8 +104,8 @@ public class TouchController : VCNVMonoBehaviour
             triggerRight.triggers.Add(entryRightUp);
 
             //Sự kiện khi nhấn nút nhảy
-            /*
-             EventTrigger.Entry entryJumpDown = new EventTrigger.Entry();
+
+            EventTrigger.Entry entryJumpDown = new EventTrigger.Entry();
             entryJumpDown.eventID = EventTriggerType.PointerDown;
             entryJumpDown.callback.AddListener((eventData) => { Jump(); });
             triggerJump.triggers.Add(entryJumpDown);
@@ -113,7 +113,7 @@ public class TouchController : VCNVMonoBehaviour
             EventTrigger.Entry entryJumpUp = new EventTrigger.Entry();
             entryJumpUp.eventID = EventTriggerType.PointerUp;
             entryJumpUp.callback.AddListener((eventData) => { EndJump(); });
-            triggerJump.triggers.Add(entryJumpUp);*/
+            triggerJump.triggers.Add(entryJumpUp);
         }
 
         btnJump.onClick.AddListener(Jump);
