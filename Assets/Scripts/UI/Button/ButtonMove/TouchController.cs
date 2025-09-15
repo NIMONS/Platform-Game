@@ -17,7 +17,6 @@ public class TouchController : VCNVMonoBehaviour
     public bool isMovingRight = false;
     public bool isJumping = false;
     public bool hasJumped = false;
-    public int jumpCount = 1;
     protected override void Awake()
     {
         base.Awake();
@@ -62,70 +61,20 @@ public class TouchController : VCNVMonoBehaviour
         Debug.LogWarning(transform.name + ": LoadBtnJump");
     }
 
-    protected override void Start()
-    {
-        base.Start();
-        //this.ListenEventClick();
-    }
-
     protected override void Update()
     {
         base.Update();
-        this.HoldToMove();
+        this.PlayerMoveByMobile();
     }
 
-    protected virtual void ListenEventClick()
-    {
-        EventTrigger triggerLeft = btnLeft.GetComponent<EventTrigger>();
-        EventTrigger triggerRight = btnRight.GetComponent<EventTrigger>();
-        EventTrigger triggerJump = btnJump.GetComponent<EventTrigger>();
-        if (triggerLeft != null && triggerRight != null)
-        {
-            // Sự kiện khi nhấn nút trái
-            EventTrigger.Entry entryLeftDown = new EventTrigger.Entry();
-            entryLeftDown.eventID = EventTriggerType.PointerDown;
-            entryLeftDown.callback.AddListener((eventData) => { StartMovingLeft(); });
-            triggerLeft.triggers.Add(entryLeftDown);
-
-            EventTrigger.Entry entryLeftUp = new EventTrigger.Entry();
-            entryLeftUp.eventID = EventTriggerType.PointerUp;
-            entryLeftUp.callback.AddListener((eventData) => { StopMovingLeft(); });
-            triggerLeft.triggers.Add(entryLeftUp);
-
-            // Sự kiện khi nhấn nút phải
-            EventTrigger.Entry entryRightDown = new EventTrigger.Entry();
-            entryRightDown.eventID = EventTriggerType.PointerDown;
-            entryRightDown.callback.AddListener((eventData) => { StartMovingRight(); });
-            triggerRight.triggers.Add(entryRightDown);
-
-            EventTrigger.Entry entryRightUp = new EventTrigger.Entry();
-            entryRightUp.eventID = EventTriggerType.PointerUp;
-            entryRightUp.callback.AddListener((eventData) => { StopMovingRight(); });
-            triggerRight.triggers.Add(entryRightUp);
-
-            //Sự kiện khi nhấn nút nhảy
-
-            //EventTrigger.Entry entryJumpDown = new EventTrigger.Entry();
-            //entryJumpDown.eventID = EventTriggerType.PointerDown;
-            //entryJumpDown.callback.AddListener((eventData) => { Jump(); });
-            //triggerJump.triggers.Add(entryJumpDown);
-
-            //EventTrigger.Entry entryJumpUp = new EventTrigger.Entry();
-            //entryJumpUp.eventID = EventTriggerType.PointerUp;
-            //entryJumpUp.callback.AddListener((eventData) => { EndJump(); });
-            //triggerJump.triggers.Add(entryJumpUp);
-        }
-
-        //btnJump.onClick.AddListener(Jump);
-    }
-    public void Jump()
+    public void JumpOnClick()
     {
         int jumCount = this.playerCtrl.Movement.JumCount;
         int maxJumpCount = this.playerCtrl.Movement.MaxJumCount;
         Animator animator = this.playerCtrl.Animator;
 		if (jumCount < maxJumpCount)
 		{
-			DoubleJump();
+			Jump();
             jumCount++;
 			this.playerCtrl.Movement.SetJumpCount(jumCount);
 
@@ -142,21 +91,16 @@ public class TouchController : VCNVMonoBehaviour
 		Debug.Log("nhảy lên");
     }
 
-    public virtual void DoubleJump()
+    public virtual void Jump()
     {
         float jumpForce = this.playerCtrl.Movement.JumpForce;
         Rigidbody2D rb = this.playerCtrl.Rigidbody2D;
 
         rb.velocity = new Vector2(rb.velocity.x, 0f);
 
-		this.playerCtrl.Rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+		this.playerCtrl.Rigidbody2D.AddForce(Vector2.up * (jumpForce+2), ForceMode2D.Impulse);
 	}
 
-    public void EndJump()
-    {
-        // Khi người chơi ngừng nhấn nút nhảy, reset lại biến hasJumped để cho phép nhảy lần tiếp theo
-        hasJumped = false;
-    }
 
     public void StartMovingLeft()
     {
@@ -177,30 +121,30 @@ public class TouchController : VCNVMonoBehaviour
         this.isMovingRight = false;
     }
 
-    protected virtual void HoldToMove()
+    protected virtual void PlayerMoveByMobile()
     {
         if(this.isMovingLeft)
         {
-            Debug.Log("Người chơi đang di chuyển qua trái");
+            this.MoveLeft();
         }else if (this.isMovingRight)
         {
-            Debug.Log("Người chơi đang di chuyển qua phải");
+            this.MoveRight();
         }
     }
 
-    public void MoveLeft()
+    protected void MoveLeft()
     {
-        Debug.Log("moving left");
-    }
-
-	public void MoveRight()
-	{
-		Debug.Log("moving left");
+        Rigidbody2D rb = this.playerCtrl.Rigidbody2D;
+        rb.velocity = new Vector2(-this.playerCtrl.Movement.MoveSpeed, rb.velocity.y);
+		this.playerCtrl.transform.localScale = new Vector3(-1f, 1f, 1f);
+        this.playerCtrl.Animator.SetBool("isRunning", true);
 	}
 
-	//protected void Jump()
-	//{
-	//	Debug.Log("moving left");
-	//}
-
+	protected void MoveRight()
+	{
+		Rigidbody2D rb = this.playerCtrl.Rigidbody2D;
+		rb.velocity = new Vector2(this.playerCtrl.Movement.MoveSpeed, rb.velocity.y);
+		this.playerCtrl.transform.localScale = new Vector3(1f, 1f, 1f);
+		this.playerCtrl.Animator.SetBool("isRunning", true);
+	}
 }
